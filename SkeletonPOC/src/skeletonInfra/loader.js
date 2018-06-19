@@ -1,22 +1,22 @@
 import axios from 'axios';
 
-// function loadScript (src) {
-// 	return new Promise((resolve, reject) => {
-// 		const scriptTagApp = document.createElement('script');
-// 		scriptTagApp.src = src;
-// 		scriptTagApp.onload = resolve;
-// 		scriptTagApp.onerror = () => { reject(new Error(`faild load script ${scriptTagApp.src}`)); };
-// 		scriptTagApp.async = true;
-// 		document.body.appendChild(scriptTagApp);
-// 	});
-// }
+function loadScript (src) {
+	return new Promise((resolve, reject) => {
+		const scriptTagApp = document.createElement('script');
+		scriptTagApp.src = src;
+		scriptTagApp.onload = resolve;
+		scriptTagApp.onerror = () => { reject(new Error(`faild load async script ${scriptTagApp.src}`)); };
+		scriptTagApp.async = true;
+		document.body.appendChild(scriptTagApp);
+	});
+}
 
 function loadDeferredScript (src) {
 	return new Promise((resolve, reject) => {
 		const scriptTagApp = document.createElement('script');
 		scriptTagApp.src = src;
 		scriptTagApp.onload = resolve;
-		scriptTagApp.onerror = () => { reject(new Error(`faild load script ${scriptTagApp.src}`)); };
+		scriptTagApp.onerror = () => { reject(new Error(`faild load defer script ${scriptTagApp.src}`)); };
 		scriptTagApp.async = false;
 		scriptTagApp.type = 'text/javascript';
 		scriptTagApp.defer = true;
@@ -34,23 +34,37 @@ function loadStyle (src) {
 	document.getElementsByTagName('head')[0].appendChild(link);
 }
 
-function interLibrary (mountPoint, libName) {
+function interLibrary (mountPoint, libName, appName) {
 	document.getElementById(mountPoint).innerHTML = '<div id="aaa_mountPoint"></div>';
-	window[libName].inter('#aaa_mountPoint');
+	window[libName][appName]('#aaa_mountPoint');
 }
 
-export default function load (getAppRoute, mountPoint, libName) {
+/**
+ * load a base capability
+ * @param {getAppRoute} the route to base capability
+ * @param {mountingMap} array of libraries and thier mounting points,
+ *  this is set as array for max readability
+ */
+export default function load ({ getAppRoute, libName, mountingMap }) {
 	const trimmedRoute = getAppRoute.replace(/\/$/, '');
+
 	axios.get(`${trimmedRoute}/Publisher/GetApplication`).then(({ data }) => {
-		for (let i = 0; i < data.js.length - 1; i++) {
-			loadDeferredScript(`${trimmedRoute}/${data.js[i]}`).catch((err) => {
-				throw err;
-			});
+		const syncLoad = [];
+		for (let i = 0; i < data['js-deps'].length; i++) {
+			syncLoad.push(loadDeferredScript(`${trimmedRoute}/${data['js-deps'][i]}`));
 		}
-		loadDeferredScript(`${trimmedRoute}/${data.js[data.js.length - 1]}`).then(() => {
-			interLibrary(mountPoint, libName);
+
+		Promise.all(syncLoad).then(() => {
+			data.appsjs.forEach((app) => {
+				loadScript(`${trimmedRoute}/${app.path}`).then(() => {
+					const currMap = mountingMap.find(map => map.appName === app.appName);
+					interLibrary(currMap.mountPoint, libName, currMap.appName);
+				}).catch((e) => {
+					console.error(e);
+				});
+			});
 		}).catch((e) => {
-			throw e;
+			console.error(e);
 		});
 
 		// loadDeferredScript(`${trimmedRoute}/${data.js[0]}`);

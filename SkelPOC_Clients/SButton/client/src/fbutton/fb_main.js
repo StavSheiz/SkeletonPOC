@@ -1,11 +1,11 @@
 import Vue from 'vue';
-import App from './sb_App.vue';
+import App from './fb_App.vue';
 
-var inter = divId => {
+var fbInter = divId => {
 	Vue.config.productionTip = false;
 	return new Vue({
 		render: h => h(App)
 	}).$mount(divId);
 };
 
-export { inter };
+export { fbInter };

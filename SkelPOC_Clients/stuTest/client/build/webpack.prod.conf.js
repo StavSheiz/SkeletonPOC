@@ -27,7 +27,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     filename: utils.assetsPath('js/[name].js'),
     chunkFilename: utils.assetsPath('js/[id].js'),
 	publicPath: '/stuApp/client/',
-    library: 'skelpoc',
+    library: 'stuApp',
     libraryTarget: 'umd',
 	umdNamedDefine: true,
   },
@@ -106,7 +106,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // in a separate chunk, similar to the vendor chunk
     // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'app',
+      name: 'stuApp',
       async: 'vendor-async',
       children: true,
       minChunks: 3

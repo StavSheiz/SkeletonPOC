@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,20 +16,25 @@ namespace SkeletonPOCApplicationServer.Controllers
         {
             JObject arrAppFiles = new JObject();
 
-            //string AppJs = System.Configuration.ConfigurationManager.AppSettings.Get("app.js");
-            //string VendorJs = System.Configuration.ConfigurationManager.AppSettings.Get("vendor.js");
-            string AppCss = System.Configuration.ConfigurationManager.AppSettings.Get("app.css");
+            JArray apps = new JArray();
+            apps.Add(this.CreateApp(libName: "stuApp", configKey: "stuApp.js"));
+            arrAppFiles["appsjs"] = apps;
 
-            //arrAppFiles["app"] = AppJs;
-            //arrAppFiles["vendor"] = VendorJs;
-            arrAppFiles["css"] = AppCss;
+            string css = ConfigurationManager.AppSettings.Get("capability.css");
+            arrAppFiles["css"] = css;
 
-
-            string[] js = System.Configuration.ConfigurationManager.AppSettings.Get("js").Split(';');
-
-            arrAppFiles["js"] = new JArray(js);
+            string[] js = ConfigurationManager.AppSettings.Get("js-deps").Split(';');
+            arrAppFiles["js-deps"] = new JArray(js);
 
             return arrAppFiles;
+        }
+
+        public JObject CreateApp(string libName, string configKey)
+        {
+            JObject app = new JObject();
+            app["libName"] = libName;
+            app["path"] = ConfigurationManager.AppSettings.Get(configKey);
+            return app;
         }
     }
 }

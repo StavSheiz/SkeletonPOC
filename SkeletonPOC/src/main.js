@@ -22,7 +22,15 @@ routerInstance.add({
 	// pattern: /products\/(.*)\/edit\/(.*)/
 	pattern: /#\/stuTest(\/?)(.*)/,
 	handler () {
-		load('http://localhost/stuApp', 'content', 'skelpoc');
+		load({
+			getAppRoute: 'http://localhost/stuApp',
+			mountingMap: [
+				{
+					mountPoint: 'content',
+					libName: 'stuApp'
+				}
+			]
+		});
 	}
 });
 
@@ -33,5 +41,26 @@ new Vue({
 	render: h => h(App)
 }).$mount('#app');
 
-load('http://localhost/SButtonTester', 'sButton', 'sbutton');
+load({
+	getAppRoute: 'http://localhost/SButtonTester',
+	libName: 'topbs',
+	mountingMap: [
+		{
+			mountPoint: 'sButton',
+			appName: 'sbInter'
+		},
+		{
+			mountPoint: 'fButton',
+			appName: 'fbInter'
+		},
+		{
+			mountPoint: 'qButton',
+			appName: 'qbInter'
+		},
+		{
+			mountPoint: 'aButton',
+			appName: 'abInter'
+		}
+	]
+});
 routerInstance.check(location.hash);

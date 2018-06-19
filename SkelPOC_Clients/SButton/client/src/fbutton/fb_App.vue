@@ -1,13 +1,13 @@
 <template>
-	<div id="sButton_app" @click="my_alert('s Clicked')">
-		Sb
+	<div id="fButton_app" @click="my_alert('f Clicked')">
+		Fb
 	</div>
 </template>
 
 <script>
 
 export default {
-	name: 'app',
+	name: 'fButton_app',
 	methods: {
 		my_alert (text) {
 			alert(text);
@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style lang="less">
-	sButton_app {
+	#fButton_app {
 		width: 30px;
 		height: 100%;
 		display: flex;
@@ -26,8 +26,6 @@ export default {
 		justify-content: center;
 		color: #a2e682;
 		font-weight: bold;
-		border-left: 1px solid black;
 		cursor: pointer;
 	}
-
 </style>

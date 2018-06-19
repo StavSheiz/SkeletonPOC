@@ -22,7 +22,7 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/st_main.js'
+    stuApp: './src/st_main.js'
   },
   output: {
     path: config.build.assetsRoot,
@@ -30,7 +30,7 @@ module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath,
-	library: 'skelpoc',
+	library: 'stuApp',
     libraryTarget: 'umd',
     umdNamedDefine: true,
   },

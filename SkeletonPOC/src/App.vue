@@ -4,9 +4,9 @@
 			<div id="rightSide" class="navItem">
 				<div id="navIcon">Icon</div>
 				<div id="sButton">S</div>
-				<div>F</div>
-				<div>Q</div>
-				<div>A</div>
+				<div id="fButton">F</div>
+				<div id="qButton">Q</div>
+				<div id="aButton">A</div>
 			</div>
 			<a href="#" class="navItem">Home</a>
 			<a href="#/stuTest" class="navItem">stuTest</a>
