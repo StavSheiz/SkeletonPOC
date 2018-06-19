@@ -22,7 +22,6 @@ routerInstance.add({
 	// pattern: /products\/(.*)\/edit\/(.*)/
 	pattern: /#\/stuTest(\/?)(.*)/,
 	handler () {
-		debugger;
 		load('http://localhost/stuApp', 'content', 'skelpoc');
 	}
 });

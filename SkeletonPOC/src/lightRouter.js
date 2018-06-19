@@ -61,7 +61,6 @@ export default function lightRouter ({ mode, root }) {
 		};
 
 		window.onhashchange = () => {
-			debugger;
 			this.check(location.hash);
 		};
 
