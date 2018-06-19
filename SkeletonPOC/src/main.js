@@ -23,7 +23,7 @@ routerInstance.add({
 	pattern: /#\/stuTest(\/?)(.*)/,
 	handler () {
 		debugger;
-		load('http://localhost/SkeletonPOC', 'content', 'skelpoc');
+		load('http://localhost/stuApp', 'content', 'skelpoc');
 	}
 });
 
